@@ -1,20 +1,25 @@
-# Usa uma versão leve do Node
-FROM node:18-alpine
+# Usa a versão 'slim' que evita erros de dependências faltando (python, make, g++)
+FROM node:18-slim
 
-# Cria a pasta do app dentro do servidor
+# Garante que as ferramentas básicas do sistema estejam instaladas
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Pasta do app
 WORKDIR /usr/src/app
 
-# Copia os arquivos de configuração (package.json)
+# Copia os arquivos de dependência
 COPY package*.json ./
 
-# Instala as dependências do projeto
-RUN npm install --production
+# Instala as dependências (agora com suporte a tudo)
+RUN npm install
 
-# Copia todo o resto do seu código para dentro da pasta
+# Copia o código fonte
 COPY . .
 
-# Expõe a porta que o Google Cloud espera (padrão)
+# Expõe a porta e inicia
 EXPOSE 8080
-
-# Comando para iniciar o seu servidor
-CMD [ "npm", "start" ]
+CMD [ "node", "index.js" ]
