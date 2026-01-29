@@ -8,18 +8,19 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-    origin: ["https://seu-front-end.vercel.app", "http://localhost:3000"]
-}));
+// 👇 ALTERAÇÃO AQUI: Liberando geral para acabar com o erro de CORS nos testes
+app.use(cors());
+// -----------------------------------------------------------------------
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ✅ Rotas principais
 app.use('/api', routes);
 
-app.get('/api', (req, res) => res.send('API Pi-Mananger funcionando 🚀'));
+app.get('/', (req, res) => res.send('API Pi-Mananger funcionando 🚀'));
 
-// Conexão com o MongoDB (Assíncrona e não bloqueante)
+// Conexão com o MongoDB
 if (process.env.MONGO_URI) {
     console.log("⏳ Tentando conectar ao MongoDB...");
     mongoose.connect(process.env.MONGO_URI)
@@ -29,8 +30,7 @@ if (process.env.MONGO_URI) {
     console.error('❌ Erro: Variável de ambiente MONGO_URI não definida!');
 }
 
-// Inicialização do Servidor (Imediata)
-const PORT = process.env.PORT || 8080; // Cloud Run usa 8080 por padrão
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
