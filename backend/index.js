@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ Rotas principais
 app.use('/api', routes);
 
-app.get('/', (req, res) => res.send('API Pi-Mananger funcionando 🚀'));
+app.get('/api', (req, res) => res.send('API Pi-Mananger funcionando 🚀'));
 
 // Conexão com o MongoDB (Assíncrona e não bloqueante)
 if (process.env.MONGO_URI) {
