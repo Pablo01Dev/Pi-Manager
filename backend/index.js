@@ -8,7 +8,9 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: ["https://seu-front-end.vercel.app", "http://localhost:3000"]
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -21,8 +23,8 @@ app.get('/', (req, res) => res.send('API Pi-Mananger funcionando 🚀'));
 if (process.env.MONGO_URI) {
     console.log("⏳ Tentando conectar ao MongoDB...");
     mongoose.connect(process.env.MONGO_URI)
-      .then(() => console.log('✅ MongoDB conectado com sucesso!'))
-      .catch(err => console.error('❌ Erro ao conectar no MongoDB:', err));
+        .then(() => console.log('✅ MongoDB conectado com sucesso!'))
+        .catch(err => console.error('❌ Erro ao conectar no MongoDB:', err));
 } else {
     console.error('❌ Erro: Variável de ambiente MONGO_URI não definida!');
 }
