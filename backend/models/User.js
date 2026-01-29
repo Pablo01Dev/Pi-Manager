@@ -1,5 +1,5 @@
-// backend/models/User.js
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   nome: {
@@ -10,12 +10,25 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
   },
-  telefone: String,
+  senha: {
+    type: String,
+    required: true,
+    select: false,
+  },
   criadoEm: {
     type: Date,
     default: Date.now,
   },
 });
 
-export default mongoose.model('User', UserSchema);
+UserSchema.pre('save', async function (next) {
+  const hash = await bcrypt.hash(this.senha, 10);
+  this.senha = hash;
+  next();
+});
+
+const User = mongoose.model('User', UserSchema);
+
+module.exports = User;

@@ -42,6 +42,11 @@ const imovelSchema = new mongoose.Schema({
   ordem: {
     type: Number,
     default: 0
+  },
+  usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
   }
 });
 

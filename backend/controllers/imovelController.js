@@ -17,6 +17,7 @@ export const criarImovel = async (req, res) => {
       descricao: descricao || '',
       endereco: endereco || '', // ✅ novo campo
       status: status || 'cadastrar',
+      usuario: req.user.id,
     });
 
     await novoImovel.save();
@@ -45,7 +46,7 @@ export const atualizarStatus = async (req, res) => {
   }
 
   try {
-    const imovel = await Imovel.findById(id);
+    const imovel = await Imovel.findOne({ _id: id, usuario: req.user.id });
     if (!imovel) return res.status(404).json({ erro: 'Imóvel não encontrado.' });
 
     imovel.status = status;
@@ -63,7 +64,7 @@ export const atualizarStatus = async (req, res) => {
 // ==================================================
 export const listarImoveis = async (req, res) => {
   try {
-    const imoveis = await Imovel.find({});
+    const imoveis = await Imovel.find({ usuario: req.user.id });
     res.status(200).json(imoveis);
   } catch (err) {
     console.error('[ERRO] Erro ao listar imóveis:', err);
@@ -82,9 +83,9 @@ export const deletarImovel = async (req, res) => {
   }
 
   try {
-    const imovel = await Imovel.findById(id);
+    const imovel = await Imovel.findOne({ _id: id, usuario: req.user.id });
     if (!imovel) {
-      return res.status(200).json({ sucesso: true, mensagem: 'Imóvel já removido.' });
+      return res.status(404).json({ erro: 'Imóvel não encontrado.' });
     }
 
     await Imovel.findByIdAndDelete(id);
@@ -107,7 +108,11 @@ export const atualizarImovel = async (req, res) => {
   }
 
   try {
-    const imovel = await Imovel.findByIdAndUpdate(id, dadosAtualizados, { new: true });
+    const imovel = await Imovel.findOneAndUpdate(
+      { _id: id, usuario: req.user.id },
+      dadosAtualizados,
+      { new: true }
+    );
     if (!imovel) return res.status(404).json({ mensagem: 'Imóvel não encontrado.' });
     res.json(imovel);
   } catch (err) {
@@ -126,11 +131,16 @@ export const atualizarOrdem = async (req, res) => {
   }
 
   try {
-    const operacoes = novaOrdem.map((item, i) =>
-      mongoose.Types.ObjectId.isValid(item._id)
-        ? Imovel.findByIdAndUpdate(item._id, { ordem: i })
-        : null
-    ).filter(Boolean);
+    const imoveisDoUsuario = await Imovel.find({ usuario: req.user.id }).select('_id');
+    const imoveisDoUsuarioIds = imoveisDoUsuario.map(i => i._id.toString());
+
+    const operacoes = novaOrdem.map((item, i) => {
+      if (imoveisDoUsuarioIds.includes(item._id)) {
+        return Imovel.findByIdAndUpdate(item._id, { ordem: i });
+      }
+      return null;
+    }).filter(Boolean);
+
 
     await Promise.all(operacoes);
     res.status(200).json({ message: 'Ordem atualizada com sucesso!' });
@@ -140,16 +150,3 @@ export const atualizarOrdem = async (req, res) => {
   }
 };
 
-// ==================================================
-// 🔎 Buscar último imóvel
-// ==================================================
-export const buscarUltimoImovel = async (req, res) => {
-  try {
-    const ultimo = await Imovel.findOne().sort({ ordem: -1 });
-    if (!ultimo) return res.status(404).json({ message: 'Nenhum imóvel encontrado.' });
-    res.json(ultimo);
-  } catch (err) {
-    console.error('[ERRO] Erro ao buscar último imóvel:', err);
-    res.status(500).json({ message: 'Erro ao buscar último imóvel.' });
-  }
-};
