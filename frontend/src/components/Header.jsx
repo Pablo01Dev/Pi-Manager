@@ -1,17 +1,40 @@
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../styles/Header.module.css';
 
-export default function Header() {
+const Header = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Limpa o token do localStorage
+    localStorage.removeItem('authToken');
+    // Redireciona para a página de login
+    navigate('/');
+  };
+
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
-        <h1>Pi Mananger</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="/imoveis">Imoveis</a></li>
-          <li><a href="/placas">Placas</a></li>
-        </ul>
+      <nav className={styles.nav}>
+        <NavLink 
+          to="/dashboard" 
+          className={({ isActive }) => isActive ? styles.activeLink : styles.link}
+          end // 'end' garante que ele só fica ativo na rota exata
+        >
+          Imóveis
+        </NavLink>
+        <NavLink 
+          to="/dashboard/placas" 
+          className={({ isActive }) => isActive ? styles.activeLink : styles.link}
+        >
+          Placas
+        </NavLink>
       </nav>
+      <button onClick={handleLogout} className={styles.logoutButton}>
+        Sair
+      </button>
     </header>
   );
-}
+};
+
+export default Header;
+

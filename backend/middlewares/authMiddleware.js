@@ -1,9 +1,10 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+
 const authConfig = {
-  secret: 'seu-segredo-super-secreto', // Lembre-se de usar variáveis de ambiente!
+  secret: process.env.JWT_SECRET || 'seu-segredo-super-secreto', // Lembre-se de usar variáveis de ambiente!
 };
 
-module.exports = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -12,7 +13,7 @@ module.exports = (req, res, next) => {
 
   const parts = authHeader.split(' ');
 
-  if (!parts.length === 2) {
+  if (parts.length !== 2) { // Correção aqui: a verificação estava incorreta
     return res.status(401).send({ error: 'Erro no token' });
   }
 
@@ -30,3 +31,6 @@ module.exports = (req, res, next) => {
     return next();
   });
 };
+
+export default authMiddleware;
+

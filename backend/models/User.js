@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema({
   nome: {
@@ -12,10 +12,10 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
   },
-  senha: {
+  password: { // Renomeado de 'senha' para 'password'
     type: String,
     required: true,
-    select: false,
+    select: false, // Não retorna o password em queries por padrão
   },
   criadoEm: {
     type: Date,
@@ -23,12 +23,16 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+// Hook para fazer o hash da senha antes de salvar
 UserSchema.pre('save', async function (next) {
-  const hash = await bcrypt.hash(this.senha, 10);
-  this.senha = hash;
+  // Gera o hash apenas se a senha foi modificada (ou é nova)
+  if (!this.isModified('password')) return next();
+
+  const hash = await bcrypt.hash(this.password, 10);
+  this.password = hash;
   next();
 });
 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = User;
+export default User;

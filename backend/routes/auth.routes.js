@@ -1,9 +1,12 @@
-const { Router } = require('express');
-const authController = require('../controllers/authController');
+import { Router } from 'express';
+import { register, login } from '../controllers/authController.js';
 
 const router = Router();
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+// Rota para criar o primeiro usuário/admin
+router.post('/register', register);
 
-module.exports = router;
+// Rota de login
+router.post('/login', login);
+
+export default router;
