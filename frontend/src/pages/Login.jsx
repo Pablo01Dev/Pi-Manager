@@ -44,6 +44,7 @@ const Login = () => {
 
   return (
     <div className={styles.loginContainer}>
+      <h1 className={styles.title}>Pi Manager</h1>
       <div className={styles.loginBox}>
         <h1 className={styles.title}>Login</h1>
         <p className={styles.subtitle}>Acesse sua conta para continuar</p>

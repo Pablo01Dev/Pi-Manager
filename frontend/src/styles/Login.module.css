@@ -2,6 +2,8 @@
 
 .loginContainer {
   display: flex;
+  flex-direction: column;
+  gap: 3rem;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
