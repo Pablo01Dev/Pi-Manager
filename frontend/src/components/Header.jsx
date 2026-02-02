@@ -7,7 +7,7 @@ const Header = () => {
 
   const handleLogout = () => {
     // Limpa o token do localStorage
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('pi_token');
     // Redireciona para a página de login
     navigate('/');
   };
@@ -37,4 +37,5 @@ const Header = () => {
 };
 
 export default Header;
+
 

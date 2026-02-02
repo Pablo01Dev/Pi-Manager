@@ -25,7 +25,7 @@ const Login = () => {
       const response = await api.post('/auth/login', { email, password });
       
       // Salva o token no LocalStorage
-      localStorage.setItem('authToken', response.data.token);
+      localStorage.setItem('pi_token', response.data.token);
       
       // Redireciona para o dashboard
       navigate('/dashboard');
@@ -81,3 +81,4 @@ const Login = () => {
 };
 
 export default Login;
+

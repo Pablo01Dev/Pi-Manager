@@ -63,9 +63,25 @@ export default function ModalNovoImovel({ onClose, onCriar }) {
       return;
     }
 
+    const token = localStorage.getItem('pi_token');
+
     setIsLoading(true);
     try {
-      const res = await api.post('/imoveis', { titulo, descricao, endereco, status });
+      const res = await api.post(
+        '/imoveis',
+        {
+          titulo,
+          descricao,
+          endereco,
+          status
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
 
       if (res.status === 200 || res.status === 201) {
         alert('Imóvel criado com sucesso!');
@@ -166,3 +182,4 @@ export default function ModalNovoImovel({ onClose, onCriar }) {
     </div>
   );
 }
+
