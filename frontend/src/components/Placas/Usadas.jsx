@@ -3,7 +3,7 @@ import axios from 'axios';
 import CardPlaca from './CardPlaca';
 import styles from '../../styles/Produzir.module.css';
 
-const categorias = ['Alugue', 'Compre', 'Compre e Alugue', 'Outros'];
+const categorias = ['Alugue', 'Compre', 'Compre / Alugue', 'Outros'];
 
 // 🔧 URL dinâmica: local → localhost, produção → Render
 const API_URL =

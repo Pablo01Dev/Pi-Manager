@@ -4,7 +4,7 @@ import CardPlaca from './CardPlaca';
 import ModalUsarPlaca from './ModalUsarPlaca';
 import styles from '../../styles/Produzir.module.css';
 
-const categorias = ['Alugue', 'Compre', 'Compre e Alugue', 'Outros'];
+const categorias = ['Alugue', 'Compre', 'Compre / Alugue', 'Outros'];
 
 export default function Disponiveis() {
   const [placas, setPlacas] = useState([]);
