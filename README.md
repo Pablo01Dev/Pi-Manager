@@ -26,5 +26,6 @@
 * Painel de relatórios e indicadores de desempenho
 
 ## 📦 Disponibilidade
-
-O sistema ainda está em desenvolvimento e **em breve estará disponível** para uso.
+Link: https://pi-mananger.vercel.app/
+Login: visitante@pi.com
+Senha: visitante
