@@ -14,13 +14,26 @@ export const criarPlaca = async (req, res) => {
     const tipoNorm = tipo.trim().toLowerCase();
     const observacaoNorm = (observacao || '').trim().toLowerCase();
 
+    const TIPO_CANON = {
+      'alugue': 'Alugue',
+      'compre': 'Compre',
+      'compre/alugue': 'Compre/Alugue',
+      'outros': 'Outros',
+      'outro': 'Outros',
+    };
+
+    const tipoCanon = TIPO_CANON[tipoNorm.replace(/\u200B/g, '')] || null;
+    if (!tipoCanon) {
+      return res.status(400).json({ error: 'Tipo invÃ¡lido.' });
+    }
+
     // 🔍 Monta a query de busca de forma flexível
     const query = {
       titulo: { $regex: new RegExp(`^${tituloNorm}$`, 'i') },
       largura,
       altura,
       material: { $regex: new RegExp(`^${materialNorm}$`, 'i') },
-      tipo: { $regex: new RegExp(`^${tipoNorm}$`, 'i') },
+      tipo: { $regex: new RegExp(`^${tipoCanon}$`, 'i') },
       status: 'produzir'
     };
 
@@ -45,7 +58,7 @@ export const criarPlaca = async (req, res) => {
       largura,
       altura,
       material,
-      tipo,
+      tipo: tipoCanon,
       quantidade: Number(quantidade) || 1,
       observacao,
       status: 'produzir'
