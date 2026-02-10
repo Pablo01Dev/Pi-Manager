@@ -1,9 +1,19 @@
+import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 import Placa from '../models/Placa.js';
+
+const __filename = fileURLToPath(import.meta.url);
 
 // ✅ Criar ou somar placa existente
 export const criarPlaca = async (req, res) => {
   try {
     const { titulo, largura, altura, material, tipo, quantidade, observacao } = req.body;
+
+    console.log('tipo bruto:', JSON.stringify(req.body?.tipo));
+    console.log('tipo key:', JSON.stringify(String(req.body?.tipo ?? '').trim().toLowerCase()));
+    console.log('enumValues runtime:', Placa.schema.path('tipo')?.enumValues);
+    console.log('model file:', __filename);
+    console.log('mongoose models keys:', Object.keys(mongoose.models));
 
     if (!titulo || !largura || !altura || !material || !tipo) {
       return res.status(400).json({ error: 'Campos obrigatórios ausentes.' });
@@ -229,5 +239,7 @@ export const usarPlaca = async (req, res) => {
     res.status(500).json({ error: 'Erro ao usar placa: ' + err.message });
   }
 };
+
+
 
 
