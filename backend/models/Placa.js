@@ -5,7 +5,7 @@ const placaSchema = new mongoose.Schema({
   largura: { type: Number, required: true },
   altura: { type: Number, required: true },
   material: { type: String, enum: ['Lona', 'Adesivo'], required: true },
-  tipo: { type: String, enum: ['Alugue', 'Compre', 'comprealugue', 'Outros'], required: true },
+  tipo: { type: String, enum: ['Alugue', 'Compre', 'CompreAlugue', 'Outros'], required: true },
   quantidade: { type: Number, required: true },
   observacao: { type: String },
   status: { type: String, enum: ['produzir', 'pagar', 'pago', 'disponivel', 'usada'], default: 'produzir' },

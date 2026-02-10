@@ -16,7 +16,7 @@ const MATERIAL_OPTIONS = [
 const TIPO_OPTIONS = [
   { value: 'Alugue', label: 'Alugue' },
   { value: 'Compre', label: 'Compre' },
-  { value: 'comprealugue', label: 'CompreAlugue' },
+  { value: 'CompreAlugue', label: 'CompreAlugue' },
   { value: 'Outros', label: 'Outro' },
 ];
 
