@@ -17,7 +17,7 @@ export const criarPlaca = async (req, res) => {
     const TIPO_CANON = {
       'alugue': 'Alugue',
       'compre': 'Compre',
-      'CompreAlugue': 'CompreAlugue',
+      'compre/alugue': 'Compre/Alugue',
       'outros': 'Outros',
       'outro': 'Outros',
     };
